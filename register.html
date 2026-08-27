@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Your Account - Video Blog Content</title>
+  <meta name="description" content="Register for a Video Blog Content account to turn your videos into well-structured articles." />
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo-icon.png" alt="Video Blog Content Logo" />
+        <span>Video Blog Content</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="login.html" class="nav-link">Login</a></li>
+        <li><a href="register.html" class="btn btn-sm btn-primary">Register</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="auth-page-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Create Your Account</h1>
+          <p>Get started turning video lectures into structured video blog content.</p>
+        </div>
+
+        <form id="register-form" novalidate>
+          <!-- Name Field -->
+          <div class="form-group">
+            <label for="reg-name" class="form-label">Full Name <span class="required">*</span></label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. John Doe" />
+            <div class="form-error" id="reg-name-error"></div>
+          </div>
+
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="reg-email" class="form-label">Email Address <span class="required">*</span></label>
+            <input type="email" id="reg-email" class="form-control" placeholder="name@example.com" />
+            <div class="form-error" id="reg-email-error"></div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="reg-password" class="form-label">Password <span class="required">*</span></label>
+            <input type="password" id="reg-password" class="form-control" placeholder="At least 6 characters" />
+            <div class="form-error" id="reg-password-error"></div>
+          </div>
+
+          <!-- Confirm Password Field -->
+          <div class="form-group">
+            <label for="reg-confirm-password" class="form-label">Confirm Password <span class="required">*</span></label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="Re-enter your password" />
+            <div class="form-error" id="reg-confirm-password-error"></div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="register-submit-btn">
+            Register
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Already have an account? <a href="login.html">Login</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand-info">
+        <img src="assets/logo-icon.png" alt="Video Blog Content" width="28" height="28" />
+        <span>Video Blog Content</span>
+      </div>
+      <p class="footer-text">&copy; 2026 Video Blog Content. Frontend Prototype.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
