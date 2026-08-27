@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# Temporary uploaded files
+uploads/
+processing/
+
+# Generated files
+*.wav
+*.mp4
+
+# IDE
+.vscode/
