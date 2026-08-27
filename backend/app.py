@@ -10,9 +10,8 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# -----------------------------
 # Cloudinary Configuration
-# -----------------------------
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -21,9 +20,9 @@ cloudinary.config(
 )
 
 
-# -----------------------------
+
 # Get Video Duration
-# -----------------------------
+
 
 def get_video_duration(video_path):
 
@@ -47,9 +46,9 @@ def get_video_duration(video_path):
     return float(result.stdout.strip())
 
 
-# -----------------------------
+
 # Extract Audio using FFmpeg
-# -----------------------------
+
 
 def extract_audio(video_url, output_path):
 
@@ -111,9 +110,9 @@ def extract_audio(video_url, output_path):
     return output_path
 
 
-# -----------------------------
+
 # Home Route
-# -----------------------------
+
 
 @app.route("/")
 def home():
@@ -121,9 +120,9 @@ def home():
     return "Backend is running!"
 
 
-# -----------------------------
+
 # Video Upload Route
-# -----------------------------
+
 
 @app.route("/upload", methods=["POST"])
 def upload_video():
@@ -154,9 +153,9 @@ def upload_video():
             "message": "Only MP4 videos are supported"
         }), 400
 
-    # -----------------------------
+    
     # Temporary Upload Folder
-    # -----------------------------
+    
 
     upload_folder = os.path.join(
         app.root_path,
@@ -178,9 +177,9 @@ def upload_video():
 
     try:
 
-        # -----------------------------
+      
         # Check Video Duration
-        # -----------------------------
+       
 
         duration = get_video_duration(
             temp_path
@@ -202,9 +201,9 @@ def upload_video():
                 )
             }), 400
 
-        # -----------------------------
+        
         # Upload Video to Cloudinary
-        # -----------------------------
+       
 
         result = cloudinary.uploader.upload(
             temp_path,
@@ -215,9 +214,9 @@ def upload_video():
         # Delete temporary local video
         os.remove(temp_path)
 
-        # -----------------------------
+      
         # Prepare WAV Output
-        # -----------------------------
+      
 
         processing_folder = os.path.join(
             app.root_path,
@@ -234,18 +233,18 @@ def upload_video():
             "audio.wav"
         )
 
-        # -----------------------------
+       
         # Extract Audio
-        # -----------------------------
+       
 
         extract_audio(
             result.get("secure_url"),
             audio_path
         )
 
-        # -----------------------------
+       
         # Return Response
-        # -----------------------------
+       
 
         return jsonify({
 
@@ -288,9 +287,8 @@ def upload_video():
         }), 500
 
 
-# -----------------------------
+
 # Start Flask
-# -----------------------------
 
 if __name__ == "__main__":
 
