@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Video Blog Content</title>
+  <meta name="description" content="Sign in to your Video Blog Content account to manage and generate video blog content from your videos." />
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="navbar-brand">
+        <img src="assets/logo-icon.png" alt="Video Blog Content Logo" />
+        <span>Video Blog Content</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="login.html" class="nav-link">Login</a></li>
+        <li><a href="register.html" class="btn btn-sm btn-primary">Register</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="auth-page-container">
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Welcome Back</h1>
+          <p>Enter your credentials to access your dashboard.</p>
+        </div>
+
+        <form id="login-form" novalidate>
+          <!-- Email Field -->
+          <div class="form-group">
+            <label for="login-email" class="form-label">Email Address <span class="required">*</span></label>
+            <input type="email" id="login-email" class="form-control"/>
+            <div class="form-error" id="login-email-error"></div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <label for="login-password" class="form-label">Password <span class="required">*</span></label>
+            <input type="password" id="login-password" class="form-control"/>
+            <div class="form-error" id="login-password-error"></div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn btn-primary btn-block btn-lg" id="login-submit-btn">
+            Login
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          Don't have an account? <a href="register.html">Register</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand-info">
+        <img src="assets/logo-icon.png" alt="Video Blog Content" width="28" height="28" />
+        <span>Video Blog Content</span>
+      </div>
+      <p class="footer-text">&copy; 2026 Video Blog Content. Frontend Prototype.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
