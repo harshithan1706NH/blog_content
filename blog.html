@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generated Video Blog Content - Video Blog Content</title>
+  <meta name="description" content="Read, review, and download your generated video blog content." />
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="dashboard.html" class="navbar-brand">
+        <img src="assets/logo-icon.png" alt="Video Blog Content Logo" />
+        <span>Video Blog Content</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="upload.html" class="nav-link">Upload Video</a></li>
+        <li><a href="my-blogs.html" class="nav-link">My Blogs</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+        <li><a href="login.html" class="btn btn-sm btn-secondary">Logout</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content" id="blog-view-container">
+    <div class="container container-narrow">
+      
+      <!-- Top Action Toolbar -->
+      <div class="blog-view-header">
+        <div>
+          <a href="dashboard.html" class="nav-link" style="display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.5rem;">
+            ← Back to Dashboard
+          </a>
+          <h1>Generated Video Blog Content</h1>
+        </div>
+
+        <div class="blog-actions-bar">
+          <button type="button" class="btn btn-outline" id="btn-edit-blog">
+            ✏️ Edit
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-save-blog">
+            💾 Save
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-download-pdf">
+            📄 Download PDF
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-download-docx">
+            📝 Download DOCX
+          </button>
+        </div>
+      </div>
+
+      <!-- Article Document Card -->
+      <article class="article-container">
+        
+        <header class="article-header">
+          <div class="article-meta-tags">
+            <span id="blog-display-source">Source: ai-introduction.mp4</span>
+            <span>•</span>
+            <span id="blog-display-date">27 August 2026</span>
+            <span>•</span>
+            <span class="badge badge-success"><span class="badge-dot"></span>Completed</span>
+          </div>
+
+          <h2 class="article-title" id="blog-display-title">
+            Introduction to Artificial Intelligence
+          </h2>
+        </header>
+
+        <div class="article-body">
+          
+          <!-- Introduction -->
+          <div class="article-section">
+            <h3 class="article-section-title">Introduction</h3>
+            <p id="blog-display-intro">
+              Artificial Intelligence (AI) has rapidly transformed from a speculative science fiction concept into a cornerstone of modern digital technology. From recommendation algorithms to autonomous systems, AI is reshaping how we work and live.
+            </p>
+          </div>
+
+          <!-- Main Sections (Dynamic) -->
+          <div id="blog-display-sections">
+            <div class="article-section">
+              <h3 class="article-section-title">What is Artificial Intelligence?</h3>
+              <p>At its core, Artificial Intelligence refers to computational systems capable of performing tasks that typically require human cognition. These tasks include visual perception, speech recognition, decision-making, and natural language translation.</p>
+            </div>
+            <div class="article-section">
+              <h3 class="article-section-title">Key Subfields of AI</h3>
+              <p>The landscape of AI encompasses several specialized domains: Machine Learning (ML), Deep Learning (DL), Natural Language Processing (NLP), and Computer Vision.</p>
+            </div>
+          </div>
+
+          <!-- Important Points -->
+          <div class="article-important-points">
+            <h4>💡 Important Points & Key Takeaways</h4>
+            <ul id="blog-display-points">
+              <li>AI systems learn representations from data rather than static hard-coded rule sets.</li>
+              <li>Machine Learning and Deep Learning are specialized, foundational subfields within AI.</li>
+              <li>Real-world applications span healthcare diagnostics, financial forecasting, and automated content generation.</li>
+              <li>Ethical considerations regarding algorithmic fairness and data governance remain paramount.</li>
+            </ul>
+          </div>
+
+          <!-- Conclusion -->
+          <div class="article-section">
+            <h3 class="article-section-title">Conclusion</h3>
+            <p id="blog-display-conclusion">
+              As AI technology continues to mature, its integration into everyday workflows will deepen. Understanding its foundational principles is essential for builders, creators, and leaders across every sector.
+            </p>
+          </div>
+
+        </div>
+
+      </article>
+
+      <!-- Bottom Navigation Button -->
+      <div style="margin-top: 2rem; display: flex; justify-content: space-between; align-items: center;">
+        <a href="dashboard.html" class="btn btn-secondary">
+          ← Back to Dashboard
+        </a>
+        <a href="my-blogs.html" class="btn btn-primary">
+          View My Blogs →
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand-info">
+        <img src="assets/logo-icon.png" alt="Video Blog Content" width="28" height="28" />
+        <span>Video Blog Content</span>
+      </div>
+      <p class="footer-text">&copy; 2026 Video Blog Content. Frontend Prototype.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/blog.js"></script>
+</body>
+</html>
