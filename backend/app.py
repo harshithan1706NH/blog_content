@@ -12,7 +12,6 @@ app = Flask(__name__)
 
 # Cloudinary Configuration
 
-
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
     api_key=os.getenv("CLOUDINARY_API_KEY"),
@@ -22,7 +21,6 @@ cloudinary.config(
 
 
 # Get Video Duration
-
 
 def get_video_duration(video_path):
 
