@@ -17,9 +17,12 @@ app = Flask(__name__)
 
 CORS(app)
 
+
+
 # -----------------------------
 # Cloudinary Configuration
 # -----------------------------
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -30,7 +33,10 @@ cloudinary.config(
 
 # -----------------------------
 # Get Video Duration
+
+
 # -----------------------------
+
 
 def get_video_duration(video_path):
 
