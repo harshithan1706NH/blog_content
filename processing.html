@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Processing Video - Video Blog Content</title>
+  <meta name="description" content="Simulating video audio extraction, transcript speech recognition, and video blog content synthesis." />
+  <link rel="icon" type="image/png" href="assets/logo-icon.png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="container navbar-container">
+      <a href="dashboard.html" class="navbar-brand">
+        <img src="assets/logo-icon.png" alt="Video Blog Content Logo" />
+        <span>Video Blog Content</span>
+      </a>
+
+      <button class="mobile-menu-btn" aria-label="Toggle Navigation">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <ul class="nav-links">
+        <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+        <li><a href="upload.html" class="nav-link">Upload Video</a></li>
+        <li><a href="my-blogs.html" class="nav-link">My Blogs</a></li>
+        <li><a href="profile.html" class="nav-link">Profile</a></li>
+        <li><a href="login.html" class="btn btn-sm btn-secondary">Logout</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container container-narrow">
+      
+      <div class="processing-card">
+        
+        <div class="processing-header">
+          <h1>Processing Your Video</h1>
+          <p id="processing-video-name" style="color: var(--color-text-secondary); font-size: 0.95rem;">
+            Analyzing video content and generating structured video blog content...
+          </p>
+        </div>
+
+        <!-- Animated Progress Bar -->
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar-fill" id="processing-progress-bar"></div>
+        </div>
+
+        <div class="progress-percentage" id="processing-percentage-text">
+          Processing... 0%
+        </div>
+
+        <!-- 5-Step Pipeline Checklist -->
+        <div class="processing-steps-list">
+          <div class="processing-step-item" id="step-video-selected">
+            <div class="step-icon-state">○</div>
+            <span>Video Selected</span>
+          </div>
+
+          <div class="processing-step-item" id="step-audio-extraction">
+            <div class="step-icon-state">○</div>
+            <span>Audio Extraction</span>
+          </div>
+
+          <div class="processing-step-item" id="step-speech-recognition">
+            <div class="step-icon-state">○</div>
+            <span>Speech Recognition</span>
+          </div>
+
+          <div class="processing-step-item" id="step-transcript-processing">
+            <div class="step-icon-state">○</div>
+            <span>Transcript Processing</span>
+          </div>
+
+          <div class="processing-step-item" id="step-blog-generation">
+            <div class="step-icon-state">○</div>
+            <span>Video Blog Content Generation</span>
+          </div>
+        </div>
+
+        <!-- Completed Action Box (Shown at 100%) -->
+        <div class="processing-completed-action" id="processing-completed-section">
+          <div class="alert alert-success" style="justify-content: center; font-weight: 600; margin-bottom: 1.5rem;">
+            <span>✓</span> Video Blog Content Generated Successfully
+          </div>
+          <button type="button" class="btn btn-primary btn-lg" id="view-blog-btn">
+            View Video Blog Content →
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand-info">
+        <img src="assets/logo-icon.png" alt="Video Blog Content" width="28" height="28" />
+        <span>Video Blog Content</span>
+      </div>
+      <p class="footer-text">&copy; 2026 Video Blog Content. Frontend Prototype.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script src="js/processing.js"></script>
+</body>
+</html>

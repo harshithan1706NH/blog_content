@@ -1,16 +1,28 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+from db import get_db_connection
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
 import subprocess
 import os
 import requests
+FFMPEG_PATH = r"C:\Users\Abi-sakthi\Downloads\ffmpeg-9.0.1-essentials_build\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe"
+FFPROBE_PATH = r"C:\Users\Abi-sakthi\Downloads\ffmpeg-9.0.1-essentials_build\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe"
+
 
 load_dotenv()
 
 app = Flask(__name__)
 
+CORS(app)
+
+
+
+# -----------------------------
 # Cloudinary Configuration
+# -----------------------------
+
 
 cloudinary.config(
     cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
@@ -19,13 +31,17 @@ cloudinary.config(
 )
 
 
-
+# -----------------------------
 # Get Video Duration
+
+
+# -----------------------------
+
 
 def get_video_duration(video_path):
 
     command = [
-        "ffprobe",
+        FFPROBE_PATH,
         "-v", "error",
         "-show_entries", "format=duration",
         "-of", "default=noprint_wrappers=1:nokey=1",
@@ -44,9 +60,9 @@ def get_video_duration(video_path):
     return float(result.stdout.strip())
 
 
-
+# -----------------------------
 # Extract Audio using FFmpeg
-
+# -----------------------------
 
 def extract_audio(video_url, output_path):
 
@@ -60,7 +76,6 @@ def extract_audio(video_url, output_path):
         exist_ok=True
     )
 
-    # Temporary video downloaded from Cloudinary
     video_path = os.path.join(
         processing_folder,
         "temp_video.mp4"
@@ -79,7 +94,7 @@ def extract_audio(video_url, output_path):
 
     # FFmpeg command
     command = [
-        "ffmpeg",
+        FFMPEG_PATH,
         "-y",
         "-i", video_path,
         "-vn",
@@ -95,7 +110,7 @@ def extract_audio(video_url, output_path):
         text=True
     )
 
-    # Delete temporary downloaded video
+    # Delete temporary video
     if os.path.exists(video_path):
         os.remove(video_path)
 
@@ -108,9 +123,9 @@ def extract_audio(video_url, output_path):
     return output_path
 
 
-
+# -----------------------------
 # Home Route
-
+# -----------------------------
 
 @app.route("/")
 def home():
@@ -118,14 +133,14 @@ def home():
     return "Backend is running!"
 
 
-
+# -----------------------------
 # Video Upload Route
-
+# -----------------------------
 
 @app.route("/upload", methods=["POST"])
 def upload_video():
 
-    # Check whether a video was uploaded
+    # Check whether video was uploaded
     if "video" not in request.files:
 
         return jsonify({
@@ -135,7 +150,7 @@ def upload_video():
 
     video = request.files["video"]
 
-    # Check whether a file was selected
+    # Check whether file was selected
     if video.filename == "":
 
         return jsonify({
@@ -151,9 +166,10 @@ def upload_video():
             "message": "Only MP4 videos are supported"
         }), 400
 
-    
+
+    # -----------------------------
     # Temporary Upload Folder
-    
+    # -----------------------------
 
     upload_folder = os.path.join(
         app.root_path,
@@ -170,14 +186,15 @@ def upload_video():
         video.filename
     )
 
-    # Save temporarily
+    # Save video temporarily
     video.save(temp_path)
+
 
     try:
 
-      
+        # -----------------------------
         # Check Video Duration
-       
+        # -----------------------------
 
         duration = get_video_duration(
             temp_path
@@ -199,9 +216,10 @@ def upload_video():
                 )
             }), 400
 
-        
+
+        # -----------------------------
         # Upload Video to Cloudinary
-       
+        # -----------------------------
 
         result = cloudinary.uploader.upload(
             temp_path,
@@ -209,12 +227,53 @@ def upload_video():
             folder="blog_videos"
         )
 
-        # Delete temporary local video
+
+        # -----------------------------
+        # Save Video to PostgreSQL
+        # -----------------------------
+
+        connection = get_db_connection()
+
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            INSERT INTO videos
+            (
+                user_id,
+                filename,
+                format,
+                duration_seconds,
+                cloudinary_url
+            )
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING video_id
+        """, (
+            1,
+            video.filename,
+            "mp4",
+            round(duration),
+            result.get("secure_url")
+        ))
+
+        video_id = cursor.fetchone()[0]
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()
+
+
+        # -----------------------------
+        # Delete Temporary Video
+        # -----------------------------
+
         os.remove(temp_path)
 
-      
-        # Prepare WAV Output
-      
+
+        # -----------------------------
+        # Prepare Audio File
+        # -----------------------------
 
         processing_folder = os.path.join(
             app.root_path,
@@ -231,18 +290,20 @@ def upload_video():
             "audio.wav"
         )
 
-       
+
+        # -----------------------------
         # Extract Audio
-       
+        # -----------------------------
 
         extract_audio(
             result.get("secure_url"),
             audio_path
         )
 
-       
+
+        # -----------------------------
         # Return Response
-       
+        # -----------------------------
 
         return jsonify({
 
@@ -250,6 +311,9 @@ def upload_video():
 
             "message":
                 "Video uploaded and audio extracted successfully",
+
+            "video_id":
+                video_id,
 
             "filename":
                 video.filename,
@@ -267,10 +331,12 @@ def upload_video():
                 audio_path
         })
 
+
     except Exception as e:
 
         # Delete temporary upload if it still exists
         if os.path.exists(temp_path):
+
             os.remove(temp_path)
 
         return jsonify({
@@ -285,8 +351,9 @@ def upload_video():
         }), 500
 
 
-
+# -----------------------------
 # Start Flask
+# -----------------------------
 
 if __name__ == "__main__":
 
