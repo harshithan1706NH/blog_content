@@ -25,17 +25,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Format file size nicely
   function formatBytes(bytes, decimals = 2) {
     if (!+bytes) return '0 Bytes';
+
     const k = 1024;
     const dm = decimals < 0 ? 0 : decimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+
+    return `${parseFloat(
+      (bytes / Math.pow(k, i)).toFixed(dm)
+    )} ${sizes[i]}`;
   }
 
-  // Format seconds to mm:ss or hh:mm:ss
+  // Format seconds to mm:ss
   function formatDuration(seconds) {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
+
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   }
 
@@ -43,7 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (errorMessage && errorAlert) {
       errorMessage.textContent = msg;
       errorAlert.style.display = 'flex';
-      errorAlert.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      errorAlert.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest'
+      });
     }
   }
 
@@ -56,83 +65,116 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetUpload() {
     currentVideoFile = null;
     currentVideoDuration = 0;
+
     if (currentObjectUrl) {
       URL.revokeObjectURL(currentObjectUrl);
       currentObjectUrl = null;
     }
-    if (fileInput) fileInput.value = '';
-    if (previewCard) previewCard.style.display = 'none';
-    if (dropzone) dropzone.style.display = 'block';
+
+    if (fileInput) {
+      fileInput.value = '';
+    }
+
+    if (previewCard) {
+      previewCard.style.display = 'none';
+    }
+
+    if (dropzone) {
+      dropzone.style.display = 'block';
+    }
+
     if (previewVideo) {
       previewVideo.removeAttribute('src');
       previewVideo.load();
     }
+
     hideError();
   }
 
   // Handle selected file validation
   function handleFile(file) {
     hideError();
-    if (!file) return;
+
+    if (!file) {
+      return;
+    }
 
     // 1. Validate MP4 format
-    const isMp4 = file.type === 'video/mp4' || file.name.toLowerCase().endsWith('.mp4');
+    const isMp4 =
+      file.type === 'video/mp4' ||
+      file.name.toLowerCase().endsWith('.mp4');
+
     if (!isMp4) {
       showError('Only MP4 videos are supported.');
       return;
     }
 
-    // Load video metadata to validate duration (max 30 mins = 1800s)
+    // Load video metadata to validate duration
     const tempVideo = document.createElement('video');
+
     tempVideo.preload = 'metadata';
+
     const objectUrl = URL.createObjectURL(file);
 
     tempVideo.onloadedmetadata = function () {
       const duration = tempVideo.duration;
-      const MAX_DURATION_SECONDS = 30 * 60; // 30 minutes
+
+      const MAX_DURATION_SECONDS = 30 * 60;
 
       if (duration > MAX_DURATION_SECONDS) {
         URL.revokeObjectURL(objectUrl);
-        showError('Video duration must not exceed 30 minutes.');
+
+        showError(
+          'Video duration must not exceed 30 minutes.'
+        );
+
         return;
       }
 
-      // Valid file!
+      // Valid file
       currentVideoFile = file;
       currentVideoDuration = duration;
       currentObjectUrl = objectUrl;
 
       // Update UI preview
-      if (fileNameDisplay) fileNameDisplay.textContent = file.name;
-      if (fileSizeDisplay) fileSizeDisplay.textContent = formatBytes(file.size);
-      if (fileDurationDisplay) fileDurationDisplay.textContent = `Duration: ${formatDuration(duration)}`;
-      
+      if (fileNameDisplay) {
+        fileNameDisplay.textContent = file.name;
+      }
+
+      if (fileSizeDisplay) {
+        fileSizeDisplay.textContent = formatBytes(file.size);
+      }
+
+      if (fileDurationDisplay) {
+        fileDurationDisplay.textContent =
+          `Duration: ${formatDuration(duration)}`;
+      }
+
       if (previewVideo) {
         previewVideo.src = objectUrl;
       }
 
-      if (dropzone) dropzone.style.display = 'none';
-      if (previewCard) previewCard.style.display = 'block';
+      if (dropzone) {
+        dropzone.style.display = 'none';
+      }
+
+      if (previewCard) {
+        previewCard.style.display = 'block';
+      }
     };
 
     tempVideo.onerror = function () {
-      // If browser can't read metadata or preview, accept MP4 based on extension
-      currentVideoFile = file;
-      currentVideoDuration = 600; // default safe fallback (10 mins)
-      currentObjectUrl = objectUrl;
+      URL.revokeObjectURL(objectUrl);
 
-      if (fileNameDisplay) fileNameDisplay.textContent = file.name;
-      if (fileSizeDisplay) fileSizeDisplay.textContent = formatBytes(file.size);
-      if (fileDurationDisplay) fileDurationDisplay.textContent = 'Format: MP4 (Duration verified)';
-
-      if (dropzone) dropzone.style.display = 'none';
-      if (previewCard) previewCard.style.display = 'block';
+      showError(
+        'Could not read the video file. Please select a valid MP4 video.'
+      );
     };
 
     tempVideo.src = objectUrl;
   }
 
-  // Event Listeners for Browse button & File Input
+  // Browse button
   if (browseBtn && fileInput) {
     browseBtn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -140,66 +182,192 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // File input
   if (fileInput) {
     fileInput.addEventListener('change', (e) => {
-      if (e.target.files && e.target.files.length > 0) {
+      if (
+        e.target.files &&
+        e.target.files.length > 0
+      ) {
         handleFile(e.target.files[0]);
       }
     });
   }
 
-  // Drag and Drop Listeners
+  // Drag and Drop
   if (dropzone) {
+
     dropzone.addEventListener('click', () => {
-      if (fileInput) fileInput.click();
+      if (fileInput) {
+        fileInput.click();
+      }
     });
 
     ['dragenter', 'dragover'].forEach(eventName => {
+
       dropzone.addEventListener(eventName, (e) => {
+
         e.preventDefault();
         e.stopPropagation();
+
         dropzone.classList.add('drag-over');
+
       });
+
     });
 
     ['dragleave', 'drop'].forEach(eventName => {
+
       dropzone.addEventListener(eventName, (e) => {
+
         e.preventDefault();
         e.stopPropagation();
+
         dropzone.classList.remove('drag-over');
+
       });
+
     });
 
     dropzone.addEventListener('drop', (e) => {
-      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleFile(e.dataTransfer.files[0]);
+
+      if (
+        e.dataTransfer &&
+        e.dataTransfer.files &&
+        e.dataTransfer.files.length > 0
+      ) {
+
+        handleFile(
+          e.dataTransfer.files[0]
+        );
+
       }
+
     });
   }
 
   // Remove video button
   if (removeVideoBtn) {
-    removeVideoBtn.addEventListener('click', resetUpload);
+    removeVideoBtn.addEventListener(
+      'click',
+      resetUpload
+    );
   }
 
   // Start Processing Button
   if (startProcessingBtn) {
-    startProcessingBtn.addEventListener('click', () => {
-      if (!currentVideoFile) {
-        showError('Please select an MP4 video to continue.');
-        return;
+
+    startProcessingBtn.addEventListener(
+      'click',
+      async () => {
+
+        if (!currentVideoFile) {
+
+          showError(
+            'Please select an MP4 video to continue.'
+          );
+
+          return;
+        }
+
+        // Disable button while uploading
+        startProcessingBtn.disabled = true;
+        startProcessingBtn.textContent = 'Uploading...';
+
+        hideError();
+
+        try {
+
+          // Create multipart/form-data
+          const formData = new FormData();
+
+          // IMPORTANT:
+          // "video" must match Flask's request.files["video"]
+          formData.append(
+            'video',
+            currentVideoFile
+          );
+
+          // Send video to Flask backend
+          const response = await fetch(
+            'http://127.0.0.1:5000/upload',
+            {
+              method: 'POST',
+              body: formData
+            }
+          );
+
+          // Convert Flask JSON response
+          const result = await response.json();
+
+          // Handle backend failure
+          if (
+            !response.ok ||
+            !result.success
+          ) {
+
+            throw new Error(
+              result.message ||
+              'Video upload failed.'
+            );
+          }
+
+          // Store backend response
+          // in sessionStorage through VideoBlogStore
+          VideoBlogStore.setTempUploadedVideo({
+
+            name: result.filename,
+
+            size: formatBytes(
+              currentVideoFile.size
+            ),
+
+            duration: result.duration_seconds,
+
+            public_id: result.public_id,
+
+            video_url: result.video_url,
+
+            audio_file: result.audio_file,
+
+            uploadedAt:
+              new Date().toLocaleDateString(
+                'en-GB',
+                {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                }
+              )
+
+          });
+
+          // Move to processing page
+          window.location.href =
+            'processing.html';
+
+        } catch (error) {
+
+          console.error(
+            'Video upload error:',
+            error
+          );
+
+          showError(
+            error.message ||
+            'Could not upload the video.'
+          );
+
+          // Re-enable button
+          startProcessingBtn.disabled = false;
+
+          startProcessingBtn.textContent =
+            'Start Processing →';
+        }
+
       }
+    );
 
-      // Store uploaded video metadata for processing demonstration
-      VideoBlogStore.setTempUploadedVideo({
-        name: currentVideoFile.name,
-        size: formatBytes(currentVideoFile.size),
-        duration: formatDuration(currentVideoDuration || 480),
-        uploadedAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-      });
-
-      // Navigate to simulated processing screen
-      window.location.href = 'processing.html';
-    });
   }
+
 });
