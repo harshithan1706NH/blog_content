@@ -7,9 +7,8 @@ from dotenv import load_dotenv
 import subprocess
 import os
 import requests
-FFMPEG_PATH = r"C:\Users\Abi-sakthi\Downloads\ffmpeg-9.0.1-essentials_build\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe"
-FFPROBE_PATH = r"C:\Users\Abi-sakthi\Downloads\ffmpeg-9.0.1-essentials_build\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe"
-
+FFMPEG_PATH = "ffmpeg"
+FFPROBE_PATH = "ffprobe"
 
 load_dotenv()
 
