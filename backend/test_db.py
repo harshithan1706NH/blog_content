@@ -1,9 +1,19 @@
 from db import get_db_connection
 
-try:
-    connection = get_db_connection()
-    print("PostgreSQL connection successful!")
-    connection.close()
-except Exception as e:
-    print("Database connection failed:")
-    print(e)
+conn = get_db_connection()
+cur = conn.cursor()
+
+cur.execute("""
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;
+""")
+
+print("Tables in Neon database:")
+
+for row in cur.fetchall():
+    print(row[0])
+
+cur.close()
+conn.close()
