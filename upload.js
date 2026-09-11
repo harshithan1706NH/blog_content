@@ -289,13 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
           );
 
           // Send video to Flask backend
-          const response = await fetch(
-            'http://127.0.0.1:5000/upload',
-            {
-              method: 'POST',
-              body: formData
-            }
-          );
+         const response = await fetch('http://127.0.0.1:5000/upload', {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+          });
 
           // Convert Flask JSON response
           const result = await response.json();
