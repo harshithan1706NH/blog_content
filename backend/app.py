@@ -21,7 +21,15 @@ CORS(app, supports_credentials=True)
 FFMPEG_PATH = "ffmpeg"
 FFPROBE_PATH = "ffprobe"
 
-PARAKEET_PYTHON = r"C:\Users\harsh\Desktop\HARSHITHA N\Project\blog\parakeet-env\Scripts\python.exe"
+PARAKEET_ENV = os.path.abspath(
+    os.path.join(app.root_path, "..", "parakeet-env")
+)
+
+PARAKEET_PYTHON = os.path.join(
+    PARAKEET_ENV,
+    "Scripts",
+    "python.exe"
+)
 
 PARAKEET_SCRIPT = os.path.join(
     app.root_path,
