@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
+from blog_generator import generate_blog
 from db import get_db_connection
 from transcript_cleaner import clean_transcript
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -136,6 +137,7 @@ def signup():
     finally:
         if cursor:
             cursor.close()
+
         if connection:
             connection.close()
 
@@ -212,6 +214,7 @@ def login():
     finally:
         if cursor:
             cursor.close()
+
         if connection:
             connection.close()
 
@@ -321,6 +324,7 @@ def extract_audio(video_url, output_path):
 
     return output_path
 
+
 def transcribe_audio(audio_path):
     result = subprocess.run(
         [PARAKEET_PYTHON, PARAKEET_SCRIPT, audio_path],
@@ -364,6 +368,48 @@ def save_transcript(video_id, transcript):
 
         raise Exception(
             "Failed to save transcript: " + str(e)
+        )
+
+    finally:
+        if cursor:
+            cursor.close()
+
+        if connection:
+            connection.close()
+
+
+def save_blog(video_id, user_id, title, content):
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            INSERT INTO blog_contents
+            (video_id, user_id, title, content)
+            VALUES (%s, %s, %s, %s)
+            RETURNING blog_id
+        """, (
+            video_id,
+            user_id,
+            title,
+            content
+        ))
+
+        blog_id = cursor.fetchone()[0]
+
+        connection.commit()
+
+        return blog_id
+
+    except Exception as e:
+        if connection:
+            connection.rollback()
+
+        raise Exception(
+            "Failed to save blog: " + str(e)
         )
 
     finally:
@@ -503,18 +549,34 @@ def upload_video():
             cleaned_transcript
         )
 
+        blog_title, blog_content = generate_blog(
+            cleaned_transcript
+        )
+
+        blog_id = save_blog(
+            video_id,
+            user_id,
+            blog_title,
+            blog_content
+        )
+
+        if os.path.exists(audio_path):
+            os.remove(audio_path)
+
         return jsonify({
             "success": True,
-            "message": "Video uploaded and transcript generated successfully",
+            "message": "Video uploaded, transcript generated, and blog created successfully",
             "video_id": video_id,
             "filename": video.filename,
             "duration_seconds": round(duration, 2),
             "public_id": result.get("public_id"),
             "video_url": result.get("secure_url"),
-            "audio_file": audio_path,
             "transcript_id": transcript_id,
+            "blog_id": blog_id,
+            "blog_title": blog_title,
             "raw_transcript": raw_transcript,
-            "transcript": cleaned_transcript
+            "transcript": cleaned_transcript,
+            "blog": blog_content
         }), 200
 
     except Exception as e:
