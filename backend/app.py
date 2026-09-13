@@ -10,6 +10,7 @@ import cloudinary.uploader
 import subprocess
 import os
 import requests
+import traceback
 
 load_dotenv()
 
@@ -271,7 +272,7 @@ def get_video_duration(video_path):
     return float(result.stdout.strip())
 
 
-def extract_audio(video_url, output_path):
+def extract_audio(video_path, output_path):
     processing_folder = os.path.join(
         app.root_path,
         "processing"
@@ -281,21 +282,6 @@ def extract_audio(video_url, output_path):
         processing_folder,
         exist_ok=True
     )
-
-    video_path = os.path.join(
-        processing_folder,
-        "temp_video.mp4"
-    )
-
-    response = requests.get(video_url)
-
-    if response.status_code != 200:
-        raise Exception(
-            "Could not download video from Cloudinary"
-        )
-
-    with open(video_path, "wb") as file:
-        file.write(response.content)
 
     command = [
         FFMPEG_PATH,
@@ -313,9 +299,6 @@ def extract_audio(video_url, output_path):
         capture_output=True,
         text=True
     )
-
-    if os.path.exists(video_path):
-        os.remove(video_path)
 
     if result.returncode != 0:
         raise Exception(
@@ -516,8 +499,6 @@ def upload_video():
         cursor.close()
         connection.close()
 
-        os.remove(temp_path)
-
         processing_folder = os.path.join(
             app.root_path,
             "processing"
@@ -534,9 +515,12 @@ def upload_video():
         )
 
         extract_audio(
-            result.get("secure_url"),
+            temp_path,
             audio_path
         )
+
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
         raw_transcript = transcribe_audio(audio_path)
 
@@ -580,6 +564,7 @@ def upload_video():
         }), 200
 
     except Exception as e:
+        traceback.print_exc()
         if os.path.exists(temp_path):
             os.remove(temp_path)
 
