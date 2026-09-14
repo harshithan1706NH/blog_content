@@ -8,11 +8,7 @@ FILLERS = [
     "i mean"
 ]
 
-CONTEXTUAL_FILLERS = [
-    "like",
-    "actually",
-    "basically"
-]
+
 
 
 def remove_fillers(text):
